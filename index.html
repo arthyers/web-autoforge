@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoForge - Build your own car in 3D</title>
+<meta name="description" content="Design a sedan, SUV or truck in real time. Change every panel, wheel and interior surface.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="AutoForge home"><span class="brand-mark"></span>AutoForge</a>
+  <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu"><span></span><span></span></button>
+  <nav class="nav-links" id="navLinks" aria-label="Primary">
+    <a href="#about" data-spy="about">About us</a>
+    <a href="#customize" data-spy="customize">Customize</a>
+    <a href="#portfolio" data-spy="portfolio">Portfolio</a>
+    <a href="#goals" data-spy="goals">Our aim</a>
+    <a class="nav-cta" href="contact.html">Contact us</a>
+  </nav>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <canvas id="heroCanvas" aria-label="Rotating 3D car"></canvas>
+    <div class="hero-copy">
+      <p class="eyebrow">Real-time 3D configurator</p>
+      <h1><span class="split" data-split>Design the car</span><br><span class="split accent" data-split>you actually want.</span></h1>
+      <p class="lede">Pick a sedan, SUV or truck, then change every panel, wheel and seat. Spin it, open the doors and watch the paint change live.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#customize">Start customizing</a>
+        <a class="btn btn-ghost" href="#portfolio">See builds</a>
+      </div>
+      <ul class="hero-stats">
+        <li><strong data-count="3">0</strong><span>body types</span></li>
+        <li><strong data-count="17">0</strong><span>editable parts</span></li>
+        <li><strong data-count="5">0</strong><span>finishes</span></li>
+      </ul>
+    </div>
+    <a class="scroll-hint" href="#about" aria-label="Scroll to about">Scroll</a>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="wrap about-grid">
+      <div class="reveal">
+        <p class="eyebrow">About us</p>
+        <h2>A small studio that treats paint like engineering.</h2>
+        <p>AutoForge started as a weekend project: a way to see a car in your colors before anyone touches a spray gun. Today it is a design studio and a 3D tool. Customers play with the same models our designers use.</p>
+        <p>Every car on this site is built from code, panel by panel, so each part has its own material. That is why you can repaint a hood without touching the doors.</p>
+      </div>
+      <div class="cards">
+        <article class="card reveal" tabindex="0">
+          <h3>Panel-level control</h3>
+          <p>Body, hood, roof, doors, bumpers, trim, rims, calipers and lights each carry their own color and finish.</p>
+        </article>
+        <article class="card reveal" tabindex="0">
+          <h3>Inside and out</h3>
+          <p>Switch to the cabin cutaway to set seats, dashboard, carpet, headliner and ambient light.</p>
+        </article>
+        <article class="card reveal" tabindex="0">
+          <h3>Honest preview</h3>
+          <p>Real reflections, shadows and five paint finishes, so the screen looks close to the garage.</p>
+        </article>
+      </div>
+    </div>
+    <div class="wrap team reveal">
+      <h3 class="team-title">The studio</h3>
+      <div class="team-grid">
+        <div class="person"><span class="avatar" style="--h:14">MR</span><b>Maya Rahardjo</b><small>Lead designer</small></div>
+        <div class="person"><span class="avatar" style="--h:200">DK</span><b>Dion Kusuma</b><small>3D engineer</small></div>
+        <div class="person"><span class="avatar" style="--h:150">AS</span><b>Ayu Santoso</b><small>Paint and materials</small></div>
+        <div class="person"><span class="avatar" style="--h:280">RB</span><b>Rio Baskara</b><small>Customer builds</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CUSTOMIZE -->
+  <section class="section section-dark" id="customize">
+    <div class="wrap">
+      <p class="eyebrow">Customize</p>
+      <h2>Build your own.</h2>
+      <p class="sub">Drag to orbit, scroll to zoom. Choose a part on the right, then pick a color and finish.</p>
+    </div>
+
+    <div class="configurator" id="configurator">
+      <div class="viewport" id="viewport">
+        <canvas id="cfCanvas" aria-label="3D car customizer"></canvas>
+
+        <div class="type-switch" role="tablist" aria-label="Car type">
+          <button role="tab" class="chip is-on" data-type="sedan" aria-selected="true">Sedan</button>
+          <button role="tab" class="chip" data-type="suv" aria-selected="false">SUV</button>
+          <button role="tab" class="chip" data-type="truck" aria-selected="false">Truck</button>
+        </div>
+
+        <div class="view-bar" role="group" aria-label="Camera views">
+          <button class="chip" data-view="three">3/4</button>
+          <button class="chip" data-view="front">Front</button>
+          <button class="chip" data-view="side">Side</button>
+          <button class="chip" data-view="rear">Rear</button>
+          <button class="chip" data-view="top">Top</button>
+          <button class="chip" data-view="driver">Driver seat</button>
+        </div>
+
+        <div class="tool-bar">
+          <button class="chip" id="btnSpin" aria-pressed="true">Auto spin</button>
+          <button class="chip" id="btnDoors" aria-pressed="false">Open doors</button>
+          <button class="chip" id="btnDrive" aria-pressed="false">Drive</button>
+          <button class="chip" id="btnShot">Save image</button>
+        </div>
+
+        <div class="loading" id="cfLoading">Building model</div>
+        <div class="webgl-fail" id="webglFail" hidden>
+          <p>3D could not start on this device. Try a recent Chrome, Edge, Firefox or Safari with hardware acceleration on.</p>
+        </div>
+      </div>
+
+      <aside class="panel" id="panel" aria-label="Customization options">
+        <div class="panel-head">
+          <p class="eyebrow">Configurator</p>
+          <h3 id="panelTitle">Configure your sedan</h3>
+          <div class="mode-switch" role="tablist" aria-label="Edit area">
+            <button role="tab" class="seg is-on" data-mode="exterior" aria-selected="true">Exterior</button>
+            <button role="tab" class="seg" data-mode="interior" aria-selected="false">Interior</button>
+          </div>
+        </div>
+
+        <div class="panel-body" id="panelBody">
+          <div class="group">
+            <div class="group-head"><h4>Part</h4><label class="switch" id="matchWrap"><input type="checkbox" id="matchBody" checked><span></span>Match body</label></div>
+            <div class="part-list" id="partList" role="listbox" aria-label="Car parts"></div>
+          </div>
+
+          <div class="group">
+            <div class="group-head"><h4 id="colorTitle">Color</h4><span class="count" id="colorCount"></span></div>
+            <div class="swatches" id="swatches"></div>
+            <label class="custom-color">Custom <input type="color" id="customColor" value="#0e9aa7" aria-label="Custom color"></label>
+          </div>
+
+          <div class="group" id="finishGroup">
+            <div class="group-head"><h4>Finish</h4><span class="count" id="finishCount"></span></div>
+            <div class="finishes" id="finishes"></div>
+          </div>
+
+          <div class="group" id="extGroup">
+            <div class="group-head"><h4>Wheels and stance</h4></div>
+            <div class="rim-styles" id="rimStyles"></div>
+            <label class="slider">Ride height<input type="range" id="height" min="-0.06" max="0.14" step="0.005" value="0"></label>
+            <label class="slider">Window tint<input type="range" id="tint" min="0.15" max="0.95" step="0.01" value="0.55"></label>
+          </div>
+
+          <div class="group" id="extras">
+            <div class="group-head"><h4>Extras</h4></div>
+            <label class="switch"><input type="checkbox" id="optSpoiler"><span></span><em id="accLabel">Rear wing</em></label>
+            <label class="switch"><input type="checkbox" id="optRack"><span></span>Roof rack</label>
+            <label class="switch"><input type="checkbox" id="optGlow"><span></span>Underglow</label>
+            <div class="swatches small" id="glowSwatches"></div>
+          </div>
+        </div>
+
+        <div class="panel-foot">
+          <div class="summary" id="summary"></div>
+          <div class="foot-actions">
+            <button class="btn btn-ghost" id="btnReset">Reset</button>
+            <button class="btn btn-ghost" id="btnRandom">Surprise me</button>
+            <button class="btn btn-primary" id="btnSave">Save build</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="wrap saved" id="savedWrap" hidden>
+      <h3>Your saved builds</h3>
+      <div class="saved-grid" id="savedGrid"></div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section class="section" id="portfolio">
+    <div class="wrap">
+      <p class="eyebrow">Portfolio</p>
+      <h2>Builds from the studio.</h2>
+      <p class="sub">Click a build to load it into the configurator and make it yours.</p>
+      <div class="filters" role="group" aria-label="Filter builds">
+        <button class="chip is-on" data-filter="all">All</button>
+        <button class="chip" data-filter="sedan">Sedan</button>
+        <button class="chip" data-filter="suv">SUV</button>
+        <button class="chip" data-filter="truck">Truck</button>
+      </div>
+      <div class="port-grid" id="portGrid"></div>
+    </div>
+  </section>
+
+  <!-- GOALS -->
+  <section class="section section-dark" id="goals">
+    <div class="wrap">
+      <p class="eyebrow">Goals and aim</p>
+      <h2>Where we are heading.</h2>
+      <div class="goal-layout">
+        <ol class="timeline" id="timeline">
+          <li class="goal is-open">
+            <button class="goal-head" aria-expanded="true"><span class="num">01</span><span>Make design accessible</span></button>
+            <div class="goal-body"><p>Anyone should be able to shape a car without learning CAD. Every control here is one click, and every change shows at once.</p></div>
+          </li>
+          <li class="goal">
+            <button class="goal-head" aria-expanded="false"><span class="num">02</span><span>Cut paint waste</span></button>
+            <div class="goal-body"><p>Test a color on screen first. Fewer test panels and repaints means less solvent and less scrap.</p></div>
+          </li>
+          <li class="goal">
+            <button class="goal-head" aria-expanded="false"><span class="num">03</span><span>Add more body types</span></button>
+            <div class="goal-body"><p>Coupes, vans and electric hatchbacks are next, each with the same panel-level control.</p></div>
+          </li>
+          <li class="goal">
+            <button class="goal-head" aria-expanded="false"><span class="num">04</span><span>Link to real workshops</span></button>
+            <div class="goal-body"><p>Send a saved build straight to a partner workshop with a parts list and a paint code.</p></div>
+          </li>
+        </ol>
+        <div class="meters" id="meters">
+          <div class="meter"><div class="meter-top"><span>Body types</span><b>3 of 6</b></div><div class="bar"><i data-w="50"></i></div></div>
+          <div class="meter"><div class="meter-top"><span>Paint library</span><b>10 of 24</b></div><div class="bar"><i data-w="42"></i></div></div>
+          <div class="meter"><div class="meter-top"><span>Workshop partners</span><b>2 of 12</b></div><div class="bar"><i data-w="17"></i></div></div>
+          <div class="meter"><div class="meter-top"><span>Accessibility checks</span><b>80 percent</b></div><div class="bar"><i data-w="80"></i></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="wrap cta-in reveal">
+      <h2>Have a build in mind?</h2>
+      <p>Tell us about the car you want and we will take it from screen to workshop.</p>
+      <a class="btn btn-primary" href="contact.html">Contact us</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap foot-in">
+    <span class="brand"><span class="brand-mark"></span>AutoForge</span>
+    <nav aria-label="Footer"><a href="#about">About us</a><a href="#customize">Customize</a><a href="#portfolio">Portfolio</a><a href="#goals">Our aim</a><a href="contact.html">Contact us</a></nav>
+    <small>Cars on this site are procedural 3D models made for this project.</small>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="cf-core.js"></script>
+<script src="cf-cars.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
