@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact us - AutoForge</title>
+<meta name="description" content="Tell AutoForge about the car you want to build.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<header class="nav is-solid" id="nav">
+  <a class="brand" href="index.html" aria-label="AutoForge home"><span class="brand-mark"></span>AutoForge</a>
+  <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu"><span></span><span></span></button>
+  <nav class="nav-links" id="navLinks" aria-label="Primary">
+    <a href="index.html#about">About us</a>
+    <a href="index.html#customize">Customize</a>
+    <a href="index.html#portfolio">Portfolio</a>
+    <a href="index.html#goals">Our aim</a>
+    <a class="nav-cta" href="contact.html" aria-current="page">Contact us</a>
+  </nav>
+</header>
+
+<main class="page-contact">
+  <div class="wrap contact-grid">
+    <section class="contact-info reveal">
+      <p class="eyebrow">Contact us</p>
+      <h1 style="font-size:clamp(2.2rem,5vw,3.8rem)">Let's build your car.</h1>
+      <p style="margin-top:1.2rem">Tell us what you have in mind. A saved build from the configurator helps, but a rough idea is enough. We reply within two working days.</p>
+      <ul class="info-list">
+        <li><small>Studio</small>Jl. Gatot Subroto 18, Jakarta, Indonesia</li>
+        <li><small>Email</small>studio@autoforge.example</li>
+        <li><small>Hours</small>Monday to Friday, 09:00 to 17:00 WIB</li>
+      </ul>
+      <a class="btn btn-ghost" href="index.html#customize">Open the configurator</a>
+    </section>
+
+    <section class="reveal" aria-label="Contact form">
+      <form class="form" id="form" novalidate>
+        <div class="row">
+          <div class="field" id="f-name">
+            <label for="name">Full name</label>
+            <input id="name" name="name" autocomplete="name" required>
+            <span class="err" role="alert"></span>
+          </div>
+          <div class="field" id="f-email">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+            <span class="err" role="alert"></span>
+          </div>
+        </div>
+
+        <div class="field">
+          <span id="typeLabel">Car type</span>
+          <div class="type-pick" role="radiogroup" aria-labelledby="typeLabel">
+            <button type="button" class="chip is-on" role="radio" aria-checked="true" data-type="Sedan">Sedan</button>
+            <button type="button" class="chip" role="radio" aria-checked="false" data-type="SUV">SUV</button>
+            <button type="button" class="chip" role="radio" aria-checked="false" data-type="Truck">Truck</button>
+            <button type="button" class="chip" role="radio" aria-checked="false" data-type="Not sure">Not sure</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="topic">What do you need</label>
+          <select id="topic" name="topic">
+            <option>A custom build quote</option>
+            <option>Help with the configurator</option>
+            <option>Partnership or workshop</option>
+            <option>Something else</option>
+          </select>
+        </div>
+
+        <div class="field" id="f-msg">
+          <label for="msg">Message</label>
+          <textarea id="msg" name="msg" maxlength="600" required></textarea>
+          <div class="counter" id="counter" aria-live="off">0 / 600</div>
+          <span class="err" role="alert"></span>
+        </div>
+
+        <button class="btn btn-primary" type="submit" id="send">Send message</button>
+      </form>
+
+      <div class="form-ok" id="ok" role="status" tabindex="-1">
+        <svg class="tick" viewBox="0 0 64 64" fill="none" stroke="#ff7a1a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="32" cy="32" r="30"/><path d="M19 33l9 9 17-19"/></svg>
+        <h2 style="font-size:1.8rem;margin:0 auto 0.6rem">Message sent.</h2>
+        <p class="sub" style="margin:0 auto 1.4rem" id="okText"></p>
+        <button class="btn btn-ghost" type="button" id="again">Send another</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap foot-in">
+    <span class="brand"><span class="brand-mark"></span>AutoForge</span>
+    <nav aria-label="Footer"><a href="index.html#about">About us</a><a href="index.html#customize">Customize</a><a href="index.html#portfolio">Portfolio</a><a href="index.html#goals">Our aim</a><a href="contact.html">Contact us</a></nav>
+    <small>This demo form stores your message in this browser only. Nothing is sent to a server.</small>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="js/contact.js"></script>
+</body>
+</html>
